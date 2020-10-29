@@ -5,3 +5,6 @@ jspm_packages
 # Serverless directories
 .serverless
 .env
+# Ignore serverless manifest files
+serverless.manifest.json
+.serverless/manifest.json

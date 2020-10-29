@@ -5,6 +5,7 @@ plugins:
   - serverless-appsync-plugin
   - serverless-iam-roles-per-function
   - serverless-export-env
+  - serverless-manifest-plugin
 
 provider:
   name: aws
@@ -24,6 +25,12 @@ custom:
   stage: ${opt:stage, self:provider.stage}
   appSync:
     - ${file(serverless.appsync-api.yml)}
+
+  manifest:
+    postProcess: ./processManifest.js
+    disablePostDeployGeneration: true
+    disableOutput: true
+    silent: true
 
 functions:
   confirmUserSignup:
