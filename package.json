@@ -35,9 +35,10 @@
     "serverless-appsync-plugin": "^1.4.0",
     "serverless-export-env": "^1.4.0",
     "serverless-iam-roles-per-function": "^2.0.2",
-    "serverless-manifest-plugin": "^1.0.6"
+    "serverless-manifest-plugin": "^1.0.6",
+    "ulid": "^2.3.0"
   },
   "dependencies": {
-    "chance": "^1.1.7"
+    "chance": "^1.1.7"    
   }
 }

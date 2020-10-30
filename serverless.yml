@@ -42,6 +42,17 @@ functions:
         Action: dynamodb:PutItem
         Resource: !GetAtt UsersTable.Arn
 
+  getImageUploadUrl:
+    handler: functions/get-upload-url.handler
+    environment:
+      BUCKET_NAME: !Ref AssetsBucket
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - s3:PutObject
+          - s3:PutObjectAcl
+        Resource: !Sub ${AssetsBucket.Arn}/*
+
 resources:
   Resources:
     UsersTable:
@@ -100,6 +111,21 @@ resources:
           - ALLOW_USER_PASSWORD_AUTH
           - ALLOW_REFRESH_TOKEN_AUTH
         PreventUserExistenceErrors: ENABLED
+
+    AssetsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccelerateConfiguration:
+          AccelerationStatus: Enabled
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - PUT
+              AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
 
   Outputs:
     AwsRegion:
