@@ -19,6 +19,11 @@ mappingTemplates:
   - type: Mutation
     field: editMyProfile
     dataSource: usersTable
+  - type: Mutation
+    field: tweet
+    dataSource: tweetFunction
+    request: false
+    response: false
 
 dataSources:
   - type: NONE
@@ -31,3 +36,7 @@ dataSources:
     name: getImageUploadUrlFunction
     config:
       functionName: getImageUploadUrl
+  - type: AWS_LAMBDA
+    name: tweetFunction
+    config:
+      functionName: tweet
