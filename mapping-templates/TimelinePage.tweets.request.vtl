@@ -1,0 +1,21 @@
+#if ($context.source.tweets.size() == 0)
+  #return([])
+#end
+
+#set ($tweets = [])
+#foreach ($item in $context.source.tweets)
+  #set ($tweet = {})
+  #set ($tweet.id = $item.tweetId)
+  $util.qr($tweets.add($util.dynamodb.toMapValues($tweet)))
+#end
+
+{
+  "version" : "2018-05-29",
+  "operation" : "BatchGetItem",
+  "tables" : {
+    "${TweetsTable}": {
+      "keys": $util.toJson($tweets),
+      "consistentRead": false
+    }
+  }
+}
