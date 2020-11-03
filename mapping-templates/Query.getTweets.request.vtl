@@ -1,6 +1,5 @@
-#if ($context.arguments.limit > 25)
-  $util.error("max limit is 25")
-#end
+#set ($isValidLimit = $context.arguments.limit <= 25)
+$util.validate($isValidLimit, "max limit is 25")
 
 {
   "version" : "2018-05-29",
