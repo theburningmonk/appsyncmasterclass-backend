@@ -25,5 +25,21 @@ describe('Given an authenticated user', () => {
         retweets: 0,
       })
     })
+
+    it('He will see the new tweet when he calls getTweets', async () => {
+      const { tweets, nextToken } = await when.a_user_calls_getTweets(user, user.username, 25)
+
+      expect(nextToken).toBeNull()
+      expect(tweets.length).toEqual(1)
+      expect(tweets[0]).toEqual(tweet)
+    })
+
+    it('He cannot ask for more than 25 tweets in a page', async () => {
+      await expect(when.a_user_calls_getTweets(user, user.username, 26))
+        .rejects
+        .toMatchObject({
+          message: expect.stringContaining('max limit is 25')
+        })
+    })
   })
 })
