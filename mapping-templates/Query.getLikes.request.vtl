@@ -7,7 +7,7 @@ $util.validate($isValidLimit, "max limit is 25")
   "query" : {
     "expression" : "userId = :userId",
     "expressionValues" : {
-      ":userId" : $util.dynamodb.toDynamoDBJson($context.identity.username)
+      ":userId" : $util.dynamodb.toDynamoDBJson($context.arguments.userId)
     }
   },
   "nextToken" : $util.toJson($context.arguments.nextToken),
