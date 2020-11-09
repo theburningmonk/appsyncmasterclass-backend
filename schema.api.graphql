@@ -6,7 +6,7 @@ schema {
 type Query {
   getImageUploadUrl(extension: String, contentType: String): AWSURL!
 
-  getMyTimeline(limit: Int!, nextToken: String): TimelinePage!
+  getMyTimeline(limit: Int!, nextToken: String): UnhydratedTweetsPage!
 
   getMyProfile: MyProfile!
 
@@ -14,7 +14,7 @@ type Query {
 
   getTweets(userId: ID!, limit: Int!, nextToken: String): TweetsPage!
 
-  getLikes(userId: ID!, limit: Int!, nextToken: String): TweetsPage!
+  getLikes(userId: ID!, limit: Int!, nextToken: String): UnhydratedTweetsPage!
 
   getFollowers(userId: ID!, limit: Int!, nextToken: String): ProfilesPage!
   
@@ -151,7 +151,7 @@ type TweetsPage {
   nextToken: String
 }
 
-type TimelinePage {
+type UnhydratedTweetsPage {
   tweets: [ITweet!]
   nextToken: String
 }
