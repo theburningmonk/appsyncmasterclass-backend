@@ -49,9 +49,17 @@ mappingTemplates:
   - type: Tweet
     field: profile
     dataSource: usersTable
+  - type: Retweet
+    field: profile
+    dataSource: usersTable
+    request: Tweet.profile.request.vtl
+    response: Tweet.profile.response.vtl
   - type: Tweet
     field: liked
     dataSource: likesTable
+  - type: Retweet
+    field: retweetOf
+    dataSource: tweetsTable
   - type: UnhydratedTweetsPage
     field: tweets
     dataSource: tweetsTable
