@@ -1,10 +1,10 @@
-#if ($context.source.inReplyToUsers.size() == 0)
+#if ($context.source.inReplyToUserIds.size() == 0)
   #return([])
 #end
 
 #set ($users = [])
 #if ($context.info.selectionSetList.size() == 1 && $context.info.selectionSetList[0] == "id")
-  #foreach ($id in $context.source.inReplyToUsers)
+  #foreach ($id in $context.source.inReplyToUserIds)
     #set ($user = { "id": "$id" })
 
     #if ($id == $context.identity.username)
@@ -20,7 +20,7 @@
   #return($users)
 
 #else 
-  #foreach ($id in $context.source.inReplyToUsers)
+  #foreach ($id in $context.source.inReplyToUserIds)
     #set ($user = {})
     #set ($user.id = $id)
     $util.qr($users.add($util.dynamodb.toMapValues($user)))
