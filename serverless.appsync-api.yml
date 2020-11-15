@@ -49,6 +49,11 @@ mappingTemplates:
     dataSource: unretweetFunction
     request: false
     response: false
+  - type: Mutation
+    field: reply
+    dataSource: replyFunction
+    request: false
+    response: false
 
   # NESTED FIELDS
   - type: Tweet
@@ -145,6 +150,10 @@ dataSources:
     name: unretweetFunction
     config:
       functionName: unretweet
+  - type: AWS_LAMBDA
+    name: replyFunction
+    config:
+      functionName: reply
 
 substitutions:
   TweetsTable: !Ref TweetsTable
