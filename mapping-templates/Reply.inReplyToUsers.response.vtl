@@ -1,0 +1,9 @@
+#foreach ($user in $context.result.data.${UsersTable})
+  #if ($user.id == $context.identity.username)
+    #set ($user["__typename"] = "MyProfile")
+  #else
+    #set ($user["__typename"] = "OtherProfile")
+  #end
+#end 
+
+$util.toJson($context.result.data.${UsersTable})
