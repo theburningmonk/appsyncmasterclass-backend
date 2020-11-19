@@ -79,7 +79,7 @@ module.exports.handler = async (event) => {
     TransactItems: transactItems
   }).promise()
 
-  return true
+  return newTweet
 }
 
 async function getUserIdsToReplyTo(tweet) {

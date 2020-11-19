@@ -72,9 +72,19 @@ mappingTemplates:
   - type: Tweet
     field: liked
     dataSource: likesTable
+  - type: Reply
+    field: liked
+    dataSource: likesTable
+    request: Tweet.liked.request.vtl
+    response: Tweet.liked.response.vtl
   - type: Tweet
     field: retweeted
     dataSource: retweetsTable
+  - type: Reply
+    field: retweeted
+    dataSource: retweetsTable
+    request: Tweet.retweeted.request.vtl
+    response: Tweet.retweeted.response.vtl
   - type: Retweet
     field: retweetOf
     dataSource: tweetsTable
