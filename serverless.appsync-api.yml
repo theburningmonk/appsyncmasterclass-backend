@@ -108,6 +108,12 @@ mappingTemplates:
     dataSource: tweetsTable
     request: MyProfile.tweets.request.vtl
     response: MyProfile.tweets.response.vtl
+  - type: OtherProfile
+    field: following
+    dataSource: relationshipsTable
+  - type: OtherProfile
+    field: followedBy
+    dataSource: relationshipsTable
 
 dataSources:
   - type: NONE

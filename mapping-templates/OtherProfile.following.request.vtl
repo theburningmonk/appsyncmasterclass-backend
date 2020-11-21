@@ -1,0 +1,10 @@
+#set ($sk = "FOLLOWS_" + $context.source.id)
+
+{
+  "version" : "2018-05-29",
+  "operation" : "GetItem",
+  "key" : {
+    "userId" : $util.dynamodb.toDynamoDBJson($context.identity.username),
+    "sk" : $util.dynamodb.toDynamoDBJson($sk)
+  }
+}
