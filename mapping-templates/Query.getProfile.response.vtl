@@ -1,0 +1,5 @@
+#if ($context.result.items.size() == 0)
+  null
+#else
+  $util.toJson($context.result.items[0])
+#end

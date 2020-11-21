@@ -1,0 +1,15 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "Query",
+  "query" : {
+    "expression" : "screenName = :screenName",
+    "expressionValues" : {
+      ":screenName" : $util.dynamodb.toDynamoDBJson($context.arguments.screenName)
+    }
+  },
+  "index": "byScreenName",
+  "limit" : 1,
+  "scanIndexForward" : false,
+  "consistentRead" : false,
+  "select" : "ALL_ATTRIBUTES"
+}
