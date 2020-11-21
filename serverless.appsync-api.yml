@@ -54,6 +54,9 @@ mappingTemplates:
     dataSource: replyFunction
     request: false
     response: false
+  - type: Mutation
+    field: follow
+    dataSource: followMutation
 
   # NESTED FIELDS
   - type: Tweet
@@ -130,6 +133,10 @@ dataSources:
     config:
       tableName: !Ref RetweetsTable
   - type: AMAZON_DYNAMODB
+    name: relationshipsTable
+    config:
+      tableName: !Ref RelationshipsTable
+  - type: AMAZON_DYNAMODB
     name: likeMutation
     config:
       tableName: !Ref LikesTable
@@ -155,6 +162,17 @@ dataSources:
           Resource: 
             - !GetAtt UsersTable.Arn
             - !GetAtt TweetsTable.Arn
+  - type: AMAZON_DYNAMODB
+    name: followMutation
+    config:
+      tableName: !Ref RelationshipsTable
+      iamRoleStatements:
+        - Effect: Allow
+          Action: dynamodb:PutItem
+          Resource: !GetAtt RelationshipsTable.Arn
+        - Effect: Allow
+          Action: dynamodb:UpdateItem
+          Resource: !GetAtt UsersTable.Arn
   - type: AWS_LAMBDA
     name: getImageUploadUrlFunction
     config:
@@ -180,3 +198,4 @@ substitutions:
   TweetsTable: !Ref TweetsTable
   LikesTable: !Ref LikesTable
   UsersTable: !Ref UsersTable
+  RelationshipsTable: !Ref RelationshipsTable

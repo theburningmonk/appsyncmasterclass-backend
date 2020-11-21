@@ -1,0 +1,55 @@
+#set ($sk = "FOLLOWS_" + $context.arguments.userId)
+
+{
+  "version": "2018-05-29",
+  "operation": "TransactWriteItems",
+  "transactItems": [
+    {
+      "table": "${RelationshipsTable}",
+      "operation": "PutItem",
+      "key": {
+        "userId": $util.dynamodb.toDynamoDBJson($context.identity.username),
+        "sk": $util.dynamodb.toDynamoDBJson($sk)
+      },
+      "attributeValues": {
+        "otherUserId": $util.dynamodb.toDynamoDBJson($context.arguments.userId),
+        "createdAt": $util.dynamodb.toDynamoDBJson($util.time.nowISO8601())
+      },
+      "condition": {
+        "expression": "attribute_not_exists(sk)"
+      }
+    },
+    {
+      "table":"${UsersTable}",
+      "operation": "UpdateItem",
+      "key": {
+        "id": $util.dynamodb.toDynamoDBJson($context.identity.username)
+      },
+      "update": {
+        "expression": "ADD followingCount :one",
+        "expressionValues": {
+          ":one": $util.dynamodb.toDynamoDBJson(1)
+        }
+      },
+      "condition": {
+        "expression": "attribute_exists(id)"
+      }
+    },
+    {
+      "table":"${UsersTable}",
+      "operation": "UpdateItem",
+      "key": {
+        "id": $util.dynamodb.toDynamoDBJson($context.arguments.userId)
+      },
+      "update": {
+        "expression": "ADD followersCount :one",
+        "expressionValues": {
+          ":one": $util.dynamodb.toDynamoDBJson(1)
+        }
+      },
+      "condition": {
+        "expression": "attribute_exists(id)"
+      }
+    }
+  ]
+}
