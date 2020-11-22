@@ -139,6 +139,26 @@ functions:
           - !GetAtt TimelinesTable.Arn
           - !GetAtt RetweetsTable.Arn
 
+  distributeTweets:
+    handler: functions/distribute-tweets.handler
+    environment:
+      RELATIONSHIPS_TABLE: !Ref RelationshipsTable
+      TIMELINES_TABLE: !Ref TimelinesTable
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt TweetsTable.StreamArn
+    iamRoleStatements:
+      - Effect: Allow
+        Action: 
+          - dynamodb:PutItem
+          - dynamodb:DeleteItem
+          - dynamodb:BatchWriteItem
+        Resource: !GetAtt TimelinesTable.Arn
+      - Effect: Allow
+        Action: dynamodb:Query
+        Resource: !Sub "${RelationshipsTable.Arn}/index/byOtherUser"
+
 resources:
   Resources:
     UsersTable:
@@ -207,6 +227,8 @@ resources:
                 KeyType: RANGE
             Projection:
               ProjectionType: ALL
+        StreamSpecification:
+          StreamViewType: NEW_AND_OLD_IMAGES
         Tags:
           - Key: Environment
             Value: ${self:custom.stage}
