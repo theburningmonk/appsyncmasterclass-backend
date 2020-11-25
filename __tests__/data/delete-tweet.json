@@ -1,0 +1,29 @@
+{
+  "Records": [
+    {
+      "eventID": "3fc6c9f458d82bb81191518e862c3fbc",
+      "eventName": "REMOVE",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1606055595,
+        "Keys": "****",
+        "OldImage": {
+          "createdAt": { "S": "2020-11-22T14:33:15.894Z" },
+          "creator": { "S": "a0eb810f-6c2b-4b0c-a95d-d0743dc2757b" },
+          "replies": { "N": "0" },
+          "__typename": { "S": "Tweet" },
+          "id": { "S": "01EQR5Z3VP4ZHK6WEGWZ3DPGTC" },
+          "text": { "S": "vMzU#O)noj%)J$tT" },
+          "retweets": { "N": "0" },
+          "likes": { "N": "0" }
+        },
+        "SequenceNumber": "133988500000000076177987786",
+        "SizeBytes": 190,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:374852340823:table/appsyncmasterclass-backend-dev-TweetsTable-1OXHGXWO4SXHI/stream/2020-10-25T09:50:45.452"
+    }
+  ]
+}
