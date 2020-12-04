@@ -1,0 +1,25 @@
+{
+  "Records": [
+    {
+      "eventID": "48aa667b0c5f9a5d9a8b5e71fba8451f",
+      "eventName": "REMOVE",
+      "eventVersion": "1.1",
+      "eventSource": "aws:dynamodb",
+      "awsRegion": "us-east-1",
+      "dynamodb": {
+        "ApproximateCreationDateTime": 1606944127,
+        "Keys": "****",
+        "OldImage": {
+          "createdAt": { "S": "2020-12-02T21:22:07.137Z" },
+          "sk": { "S": "FOLLOWS_9cac0f28-579a-466f-9f5a-f8a2374f0214" },
+          "otherUserId": { "S": "9cac0f28-579a-466f-9f5a-f8a2374f0214" },
+          "userId": { "S": "659103c5-04a6-48d1-8652-884b30259f92" }
+        },
+        "SequenceNumber": "182390800000000004758093833",
+        "SizeBytes": 256,
+        "StreamViewType": "NEW_AND_OLD_IMAGES"
+      },
+      "eventSourceARN": "arn:aws:dynamodb:us-east-1:374852340823:table/appsyncmasterclass-backend-dev-RelationshipsTable-1RQPCXQI994AM/stream/2020-10-25T09:50:45.626"
+    }
+  ]
+}
