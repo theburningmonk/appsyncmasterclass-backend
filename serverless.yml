@@ -169,6 +169,7 @@ functions:
       - stream:
           type: dynamodb
           arn: !GetAtt RelationshipsTable.StreamArn
+    iamRoleStatementsName: ${self:service}-${self:custom.stage}-distributeTweetsToFollower
     iamRoleStatements:
       - Effect: Allow
         Action: dynamodb:Query
