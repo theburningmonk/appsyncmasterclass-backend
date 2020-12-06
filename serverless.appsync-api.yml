@@ -60,6 +60,9 @@ mappingTemplates:
   - type: Mutation
     field: follow
     dataSource: followMutation
+  - type: Mutation
+    field: unfollow
+    dataSource: unfollowMutation
 
   # NESTED FIELDS
   - type: Tweet
@@ -178,6 +181,17 @@ dataSources:
       iamRoleStatements:
         - Effect: Allow
           Action: dynamodb:PutItem
+          Resource: !GetAtt RelationshipsTable.Arn
+        - Effect: Allow
+          Action: dynamodb:UpdateItem
+          Resource: !GetAtt UsersTable.Arn
+  - type: AMAZON_DYNAMODB
+    name: unfollowMutation
+    config:
+      tableName: !Ref RelationshipsTable
+      iamRoleStatements:
+        - Effect: Allow
+          Action: dynamodb:DeleteItem
           Resource: !GetAtt RelationshipsTable.Arn
         - Effect: Allow
           Action: dynamodb:UpdateItem

@@ -164,7 +164,7 @@ functions:
     environment:
       TWEETS_TABLE: !Ref TweetsTable
       TIMELINES_TABLE: !Ref TimelinesTable
-      MAX_TWEETS: 100
+      MAX_TWEETS: "100"
     events:
       - stream:
           type: dynamodb
