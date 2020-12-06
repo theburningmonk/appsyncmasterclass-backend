@@ -1,0 +1,17 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "Query",
+  "query" : {
+    "expression" : "otherUserId = :userId AND begins_with(sk, :follows)",
+    "expressionValues" : {
+      ":userId" : $util.dynamodb.toDynamoDBJson($context.arguments.userId),
+      ":follows" : $util.dynamodb.toDynamoDBJson("FOLLOWS_")
+    }
+  },
+  "index": "byOtherUser",
+  "nextToken" : $util.toJson($context.arguments.nextToken),
+  "limit" : $util.toJson($context.arguments.limit),
+  "scanIndexForward" : false,
+  "consistentRead" : false,
+  "select" : "ALL_ATTRIBUTES"
+}

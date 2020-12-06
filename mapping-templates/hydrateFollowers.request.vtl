@@ -1,0 +1,21 @@
+#if ($context.prev.result.relationships.size() == 0)
+  #return([])
+#end
+
+#set ($users = [])
+#foreach ($relationship in $context.prev.result.relationships)
+  #set ($user = {})
+  #set ($user.id = $relationship.userId)
+  $util.qr($users.add($util.dynamodb.toMapValues($user)))
+#end
+
+{
+  "version" : "2018-05-29",
+  "operation" : "BatchGetItem",
+  "tables" : {
+    "${UsersTable}": {
+      "keys": $util.toJson($users),
+      "consistentRead": false
+    }
+  }
+}
