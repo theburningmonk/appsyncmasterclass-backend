@@ -33,7 +33,7 @@ mappingTemplates:
     functions:
       - getFollowers
       - hydrateFollowers
-    requset: simplePipeline.request.vtl
+    request: simplePipeline.request.vtl
     response: simplePipeline.response.vtl
 
   - type: Mutation
