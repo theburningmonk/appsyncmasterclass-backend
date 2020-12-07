@@ -5,7 +5,7 @@
 #set ($users = [])
 #foreach ($relationship in $context.prev.result.relationships)
   #set ($user = {})
-  #set ($user.id = $relationship.userId)
+  #set ($user.id = $relationship.otherUserId)
   $util.qr($users.add($util.dynamodb.toMapValues($user)))
 #end
 

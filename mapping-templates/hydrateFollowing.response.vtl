@@ -1,0 +1,12 @@
+#foreach ($user in $context.result.data.${UsersTable})
+  #if ($user.id == $context.identity.username)
+    #set ($user["__typename"] = "MyProfile")
+  #else
+    #set ($user["__typename"] = "OtherProfile")
+  #end
+#end
+
+{
+  "profiles": $util.toJson($context.result.data.${UsersTable}),
+  "nextToken": $util.toJson($util.defaultIfNullOrBlank($context.prev.result.nextToken, null))
+}

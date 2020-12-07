@@ -3,9 +3,9 @@ const when = require('../../steps/when')
 const chance = require('chance').Chance()
 const path = require('path')
 
-describe('hydrateFollowers.request template', () => {
+describe('hydrateFollowing.request template', () => {
   it("Should return empty array if prev.result.relationships is empty", () => {
-    const templatePath = path.resolve(__dirname, '../../../mapping-templates/hydrateFollowers.request.vtl')
+    const templatePath = path.resolve(__dirname, '../../../mapping-templates/hydrateFollowing.request.vtl')
 
     const username = chance.guid()
     const prev = {
@@ -22,7 +22,7 @@ describe('hydrateFollowers.request template', () => {
   })
 
   it("Should convert relationships to BatchGetItem keys", () => {
-    const templatePath = path.resolve(__dirname, '../../../mapping-templates/hydrateFollowers.request.vtl')
+    const templatePath = path.resolve(__dirname, '../../../mapping-templates/hydrateFollowing.request.vtl')
 
     const username = chance.guid()
     const userId = chance.guid()
@@ -47,7 +47,7 @@ describe('hydrateFollowers.request template', () => {
         "${UsersTable}": {
           "keys": [{
             "id": {
-              "S": userId
+              "S": otherUserId
             }
           }],
           "consistentRead": false
