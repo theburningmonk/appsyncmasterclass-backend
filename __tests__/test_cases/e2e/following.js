@@ -35,6 +35,28 @@ describe('Given authenticated users, user A and B', () => {
       expect(followedBy).toBe(true)
     })
 
+    it("User A should see himself in user B's list of followers", async () => {
+      const { profiles } = await when.a_user_calls_getFollowers(userA, userB.username, 25)
+
+      expect(profiles).toHaveLength(1)
+      expect(profiles[0]).toMatchObject({
+        id: userA.username
+      })
+      expect(profiles[0]).not.toHaveProperty('following')
+      expect(profiles[0]).not.toHaveProperty('followedBy')
+    })
+
+    it("User B should see user A in his list of followers", async () => {
+      const { profiles } = await when.a_user_calls_getFollowers(userB, userB.username, 25)
+
+      expect(profiles).toHaveLength(1)
+      expect(profiles[0]).toMatchObject({
+        id: userA.username,
+        following: false,
+        followedBy: true
+      })
+    })
+
     it("Adds user B's tweets to user A's timeline", async () => {
       retry(async () => {
         const { tweets } = await when.a_user_calls_getMyTimeline(userA, 25)
