@@ -59,7 +59,7 @@ jobs:
         export AWS_ACCESS_KEY_ID=`echo $CREDS | jq -r '.Credentials.AccessKeyId'`
         export AWS_SECRET_ACCESS_KEY=`echo $CREDS | jq -r '.Credentials.SecretAccessKey'`
         export AWS_SESSION_TOKEN=`echo $CREDS | jq -r '.Credentials.SessionToken'`
-        npm run deploy
+        npm run sls -- deploy
     - name: e2e tests
       run: |
         CREDS=`aws sts assume-role --role-arn arn:aws:iam::${{ secrets.DEV_ACCOUNT_ID }}:role/ci-role --role-session-name=ci_user`
