@@ -183,6 +183,26 @@ functions:
           - dynamodb:DeleteItem
         Resource: !GetAtt TimelinesTable.Arn
 
+  syncUsersToAlgolia:
+    handler: functions/sync-users-to-algolia.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt UsersTable.StreamArn
+    environment:
+      ALGOLIA_APP_ID: xxx
+      ALGOLIA_WRITE_KEY: xxx
+
+  syncTweetsToAlgolia:
+    handler: functions/sync-tweets-to-algolia.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn: !GetAtt TweetsTable.StreamArn
+    environment:
+      ALGOLIA_APP_ID: xxx
+      ALGOLIA_WRITE_KEY: xxx
+
 resources:
   Resources:
     UsersTable:
