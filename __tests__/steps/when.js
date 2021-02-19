@@ -648,6 +648,41 @@ const a_user_calls_getFollowing = async (user, userId, limit, nextToken) => {
   return result
 }
 
+const a_user_calls_search = async (user, mode, query, limit, nextToken) => {
+  const search = `query search($query: String!, $limit: Int!, $nextToken: String) {
+    search(query: $query, mode: ${mode}, limit: $limit, nextToken: $nextToken) {
+      nextToken
+      results {
+        __typename
+        ... on MyProfile {
+          ... myProfileFields
+        }
+        ... on OtherProfile {
+          ... otherProfileFields
+        }
+        ... on Tweet {
+          ... tweetFields
+        }
+        ... on Reply {
+          ... replyFields
+        }
+      }
+    }
+  }`
+  const variables = {
+    query,
+    limit,
+    nextToken
+  }
+
+  const data = await GraphQL(process.env.API_URL, search, variables, user.accessToken)
+  const result = data.search
+
+  console.log(`[${user.username}] - search for "${query}"`)
+
+  return result
+}
+
 module.exports = {
   we_invoke_confirmUserSignup,
   we_invoke_getImageUploadUrl,
@@ -676,4 +711,5 @@ module.exports = {
   a_user_calls_unfollow,
   a_user_calls_getFollowers,
   a_user_calls_getFollowing,
+  a_user_calls_search,
 }
