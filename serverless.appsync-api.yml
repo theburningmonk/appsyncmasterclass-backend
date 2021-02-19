@@ -43,6 +43,11 @@ mappingTemplates:
       - hydrateFollowing
     request: simplePipeline.request.vtl
     response: simplePipeline.response.vtl
+  - type: Query
+    field: search
+    dataSource: searchFunction
+    request: false
+    response: false
 
   - type: Mutation
     field: editMyProfile
@@ -242,6 +247,10 @@ dataSources:
     name: replyFunction
     config:
       functionName: reply
+  - type: AWS_LAMBDA
+    name: searchFunction
+    config:
+      functionName: search
 
 substitutions:
   TweetsTable: !Ref TweetsTable
