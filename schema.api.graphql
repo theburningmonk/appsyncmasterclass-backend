@@ -26,6 +26,13 @@ type Query {
     limit: Int!
     nextToken: String
   ): SearchResultsPage!
+
+  getHashTag(
+    hashTag: String!
+    mode: HashTagMode!
+    limit: Int!
+    nextToken: String
+  ): HashTagResultsPage!
 }
 
 type Mutation {
@@ -49,6 +56,14 @@ type Mutation {
 }
 
 enum SearchMode {
+  Top
+  Latest
+  People
+  Photos
+  Videos
+}
+
+enum HashTagMode {
   Top
   Latest
   People
@@ -180,5 +195,12 @@ union SearchResult = MyProfile | OtherProfile | Tweet | Reply
 
 type SearchResultsPage {
   results: [SearchResult!]
+  nextToken: String
+}
+
+union HashTagResult = MyProfile | OtherProfile | Tweet | Reply
+
+type HashTagResultsPage {
+  results: [HashTagResult!]
   nextToken: String
 }
