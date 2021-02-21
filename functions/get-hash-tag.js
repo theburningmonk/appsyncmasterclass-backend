@@ -62,7 +62,7 @@ async function searchLatest(context, hashTag, limit, nextToken) {
     context.ALGOLIA_APP_ID, context.ALGOLIA_WRITE_KEY, STAGE)
 
   const searchParams = parseNextToken(nextToken) || {
-    facetFiltering: [`hashTags:${hashTag}`],
+    facetFilters: [`hashTags:${hashTag}`],
     hitsPerPage: limit,
     page: 0
   }
