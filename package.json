@@ -42,8 +42,13 @@
     "@middy/core": "^1.5.2",
     "@middy/ssm": "^1.5.2",
     "algoliasearch": "^4.8.5",
+    "aws-appsync": "^4.0.3",
     "chance": "^1.1.7",
+    "graphql": "^15.5.0",
+    "graphql-tag": "^2.11.0",
+    "isomorphic-fetch": "^3.0.0",
     "lodash": "^4.17.20",
-    "ulid": "^2.3.0"
+    "ulid": "^2.3.0",
+    "uuid": "^8.3.2"
   }
 }
