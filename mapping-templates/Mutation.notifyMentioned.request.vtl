@@ -1,0 +1,15 @@
+{
+  "version" : "2018-05-29",
+  "operation" : "PutItem",
+  "key": {
+    "id" : $util.dynamodb.toDynamoDBJson($context.arguments.id),
+    "userId" : $util.dynamodb.toDynamoDBJson($context.arguments.userId)
+  },
+  "attributeValues" : {
+    "mentionedBy": $util.dynamodb.toDynamoDBJson($context.arguments.mentionedBy),
+    "mentionedByTweetId": $util.dynamodb.toDynamoDBJson($context.arguments.mentionedByTweetId),
+    "type": $util.dynamodb.toDynamoDBJson("Mentioned"),
+    "__typename": $util.dynamodb.toDynamoDBJson("Mentioned"),
+    "createdAt": $util.dynamodb.toDynamoDBJson($util.time.nowISO8601())
+  }
+}
