@@ -104,6 +104,9 @@ mappingTemplates:
   - type: Mutation
     field: notifyMentioned
     dataSource: notificationsTable
+  - type: Mutation
+    field: notifyReplied
+    dataSource: notificationsTable
 
   # NESTED FIELDS
   - type: Tweet
