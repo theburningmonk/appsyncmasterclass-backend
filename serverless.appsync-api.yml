@@ -9,6 +9,10 @@ additionalAuthenticationProviders:
   - authenticationType: AWS_IAM
 mappingTemplatesLocation: mapping-templates
 mappingTemplates:
+  - type: Subscription
+    field: onNotified
+    dataSource: none
+
   - type: Query
     field: getMyProfile
     dataSource: usersTable
