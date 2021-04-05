@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "sls": "sls",
-    "exportEnv": "sls export-env && sls manifest",
+    "exportEnv": "sls export-env",
     "jest": "jest",
     "test": "jest --verbose ./__tests__/test_cases/unit --silent",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
@@ -36,7 +36,7 @@
     "serverless-appsync-plugin": "^1.4.0",
     "serverless-export-env": "^1.4.0",
     "serverless-iam-roles-per-function": "^2.0.2",
-    "serverless-manifest-plugin": "^1.0.6"
+    "ws": "^7.4.4"
   },
   "dependencies": {
     "@middy/core": "^1.5.2",
