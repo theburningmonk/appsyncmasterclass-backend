@@ -331,7 +331,7 @@ type Message {
   messageId: ID!
   from: IProfile!
   message: String!
-  timestampe: AWSDateTime!
+  timestamp: AWSDateTime!
 }
 
 type MessagesPage {
