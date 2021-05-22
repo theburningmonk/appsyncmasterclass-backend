@@ -107,6 +107,11 @@ mappingTemplates:
   - type: Mutation
     field: notifyReplied
     dataSource: notificationsTable
+  - type: Mutation
+    field: sendDirectMessage
+    dataSource: sendDirectMessageFunction
+    request: false
+    response: false
 
   # NESTED FIELDS
   - type: Tweet
@@ -164,6 +169,9 @@ mappingTemplates:
   - type: OtherProfile
     field: followedBy
     dataSource: relationshipsTable
+  - type: Conversation
+    field: otherUser
+    dataSource: usersTable
 
 functionConfigurations:
   - name: getFollowers
@@ -206,6 +214,14 @@ dataSources:
     name: notificationsTable
     config:
       tableName: !Ref NotificationsTable
+  - type: AMAZON_DYNAMODB
+    name: conversationsTable
+    config:
+      tableName: !Ref ConversationsTable
+  - type: AMAZON_DYNAMODB
+    name: directMessagesTable
+    config:
+      tableName: !Ref DirectMessagesTable
   - type: AMAZON_DYNAMODB
     name: likeMutation
     config:
@@ -282,6 +298,10 @@ dataSources:
     name: getHashTagFunction
     config:
       functionName: getHashTag
+  - type: AWS_LAMBDA
+    name: sendDirectMessageFunction
+    config:
+      functionName: sendDirectMessage
 
 substitutions:
   TweetsTable: !Ref TweetsTable
