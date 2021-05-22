@@ -769,6 +769,31 @@ const a_user_calls_sendDirectMessage = async (user, otherUserId, message) => {
   return result
 }
 
+const a_user_calls_listConversations = async (user, limit, nextToken) => {
+  const listConversations = `query listConversations($limit: Int!, $nextToken: String) {
+    listConversations(
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      conversations {
+        ... conversationFields
+      }
+      nextToken
+    }
+  }`
+  const variables = {
+    limit,
+    nextToken
+  }
+
+  const data = await GraphQL(process.env.API_URL, listConversations, variables, user.accessToken)
+  const result = data.listConversations
+
+  console.log(`[${user.username}] - fetched conversations`)
+
+  return result
+}
+
 module.exports = {
   we_invoke_confirmUserSignup,
   we_invoke_getImageUploadUrl,
@@ -801,4 +826,5 @@ module.exports = {
   a_user_calls_search,
   a_user_calls_getHashTag,
   a_user_calls_sendDirectMessage,
+  a_user_calls_listConversations,
 }
