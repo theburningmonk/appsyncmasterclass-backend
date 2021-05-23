@@ -62,6 +62,9 @@ mappingTemplates:
   - type: Query
     field: listConversations
     dataSource: conversationsTable
+  - type: Query
+    field: getDirectMessages
+    dataSource: directMessagesTable
 
   - type: Mutation
     field: editMyProfile
@@ -174,6 +177,9 @@ mappingTemplates:
     dataSource: relationshipsTable
   - type: Conversation
     field: otherUser
+    dataSource: usersTable
+  - type: Message
+    field: from
     dataSource: usersTable
 
 functionConfigurations:

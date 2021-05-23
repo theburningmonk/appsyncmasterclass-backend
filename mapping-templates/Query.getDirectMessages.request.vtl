@@ -1,0 +1,27 @@
+#set ($isValidLimit = $context.arguments.limit <= 25)
+$util.validate($isValidLimit, "max limit is 25")
+
+#set ($userId = $context.identity.username)
+#set ($otherUserId = $context.arguments.otherUserId)
+
+#if ($userId.compareTo($otherUserId) < 0)
+  #set ($conversationId = $userId + '_' + $otherUserId)
+#else 
+  #set ($conversationId = $otherUserId + '_' + $userId)
+#end
+
+{
+  "version" : "2018-05-29",
+  "operation" : "Query",
+  "query" : {
+    "expression" : "conversationId = :conversationId",
+    "expressionValues" : {
+      ":conversationId" : $util.dynamodb.toDynamoDBJson($conversationId)
+    }
+  },
+  "nextToken" : $util.toJson($context.arguments.nextToken),
+  "limit" : $util.toJson($context.arguments.limit),
+  "scanIndexForward" : false,
+  "consistentRead" : false,
+  "select" : "ALL_ATTRIBUTES" 
+}

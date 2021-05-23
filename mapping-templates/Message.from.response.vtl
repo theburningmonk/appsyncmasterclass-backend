@@ -1,0 +1,9 @@
+#if (!$util.isNull($context.result))
+  #if ($context.result.id == $context.identity.username)
+    #set ($context.result["__typename"] = "MyProfile")
+  #else
+    #set ($context.result["__typename"] = "OtherProfile")
+  #end
+#end
+
+$util.toJson($context.result)

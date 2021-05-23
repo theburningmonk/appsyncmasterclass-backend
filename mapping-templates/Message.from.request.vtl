@@ -1,0 +1,19 @@
+#if ($context.info.selectionSetList.size() == 1 && $context.info.selectionSetList[0] == "id")
+  #set ($result = { "id": "$context.source.from" })
+
+  #if ($context.source.from == $context.identity.username)
+    #set ($result["__typename"] = "MyProfile")
+  #else
+    #set ($result["__typename"] = "OtherProfile")
+  #end
+  
+  #return($result)
+#end
+
+{
+  "version" : "2018-05-29",
+  "operation" : "GetItem",
+  "key" : {
+    "id" : $util.dynamodb.toDynamoDBJson($context.source.from)
+  }
+}

@@ -44,6 +44,32 @@ describe(`Given two authenticated users`, () => {
       })
     })
 
+    it("User A should see the message when he calls getDirectMessages for the conversation", async () => {
+      const { messages, nextToken } = await when.a_user_calls_getDirectMessages(userA, userB.username, 10)
+
+      expect(nextToken).toBeNull()
+      expect(messages).toHaveLength(1)
+      expect(messages[0]).toMatchObject({
+        from: {
+          id: userA.username
+        },
+        message,
+      })
+    })
+
+    it("User B should see the message when he calls getDirectMessages for the conversation", async () => {
+      const { messages, nextToken } = await when.a_user_calls_getDirectMessages(userB, userA.username, 10)
+
+      expect(nextToken).toBeNull()
+      expect(messages).toHaveLength(1)
+      expect(messages[0]).toMatchObject({
+        from: {
+          id: userA.username
+        },
+        message,
+      })
+    })
+
     describe("When User B sends a DM to User A", () => {
       let conversation2
       const message2 = chance.string({ length: 16 })
@@ -77,6 +103,32 @@ describe(`Given two authenticated users`, () => {
         expect(nextToken).toBeNull()
         expect(conversations).toHaveLength(1)
         expect(conversations[0]).toMatchObject(conversation2)
+      })
+
+      it("User A should see the new message when he calls getDirectMessages for the conversation", async () => {
+        const { messages, nextToken } = await when.a_user_calls_getDirectMessages(userA, userB.username, 10)
+  
+        expect(nextToken).toBeNull()
+        expect(messages).toHaveLength(2)
+        expect(messages[0]).toMatchObject({
+          from: {
+            id: userB.username
+          },
+          message: message2,
+        })
+      })
+  
+      it("User B should see the message when he calls getDirectMessages for the conversation", async () => {
+        const { messages, nextToken } = await when.a_user_calls_getDirectMessages(userB, userA.username, 10)
+  
+        expect(nextToken).toBeNull()
+        expect(messages).toHaveLength(2)
+        expect(messages[0]).toMatchObject({
+          from: {
+            id: userB.username
+          },
+          message: message2,
+        })
       })
     })
   })

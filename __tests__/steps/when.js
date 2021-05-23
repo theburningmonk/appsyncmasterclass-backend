@@ -151,6 +151,17 @@ fragment conversationFields on Conversation {
 }
 `
 
+const messageFragment = `
+fragment messageFields on Message {
+  messageId
+  from {
+    ... iProfileFields
+  }
+  message
+  timestamp
+}
+`
+
 registerFragment('myProfileFields', myProfileFragment)
 registerFragment('otherProfileFields', otherProfileFragment)
 registerFragment('iProfileFields', iProfileFragment)
@@ -159,6 +170,7 @@ registerFragment('retweetFields', retweetFragment)
 registerFragment('replyFields', replyFragment)
 registerFragment('iTweetFields', iTweetFragment)
 registerFragment('conversationFields', conversationFragment)
+registerFragment('messageFields', messageFragment)
 
 const we_invoke_confirmUserSignup = async (username, name, email) => {
   const handler = require('../../functions/confirm-user-signup').handler
@@ -794,6 +806,33 @@ const a_user_calls_listConversations = async (user, limit, nextToken) => {
   return result
 }
 
+const a_user_calls_getDirectMessages = async (user, otherUserId, limit, nextToken) => {
+  const getDirectMessages = `query getDirectMessages($otherUserId: ID!, $limit: Int!, $nextToken: String) {
+    getDirectMessages(
+      otherUserId: $otherUserId
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      messages {
+        ... messageFields
+      }
+      nextToken
+    }
+  }`
+  const variables = {
+    otherUserId,
+    limit,
+    nextToken
+  }
+
+  const data = await GraphQL(process.env.API_URL, getDirectMessages, variables, user.accessToken)
+  const result = data.getDirectMessages
+
+  console.log(`[${user.username}] - fetched direct messages with [${otherUserId}]`)
+
+  return result
+}
+
 module.exports = {
   we_invoke_confirmUserSignup,
   we_invoke_getImageUploadUrl,
@@ -827,4 +866,5 @@ module.exports = {
   a_user_calls_getHashTag,
   a_user_calls_sendDirectMessage,
   a_user_calls_listConversations,
+  a_user_calls_getDirectMessages,
 }
