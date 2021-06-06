@@ -108,6 +108,9 @@ mappingTemplates:
     field: notifyLiked
     dataSource: notificationsTable
   - type: Mutation
+    field: notifyDMed
+    dataSource: notificationsTable
+  - type: Mutation
     field: notifyMentioned
     dataSource: notificationsTable
   - type: Mutation

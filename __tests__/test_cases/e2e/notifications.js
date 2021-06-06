@@ -67,6 +67,11 @@ describe('Given two authenticated users', () => {
                 mentionedByTweetId
                 mentionedBy
               }
+
+              ... on DMed {
+                otherUserId
+                message
+              }
             }
           }
         `,
@@ -178,6 +183,32 @@ describe('Given two authenticated users', () => {
                 userId: userA.username,
                 mentionedByTweetId: userBsTweet.id,
                 mentionedBy: userB.username
+              })
+            ])
+          )
+        }, {
+          retries: 10,
+          maxTimeout: 1000
+        })
+      }, 15000)
+    })
+
+    describe("When user B DMs user A", () => {
+      const message = chance.string({ length: 16 })
+
+      beforeAll(async () => {
+        await when.a_user_calls_sendDirectMessage(userB, userA.username, message)
+      })
+
+      it("User A should receive a notification", async () => {
+        await retry(async () => {
+          expect(notifications).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                userId: userA.username,
+                type: "DMed",
+                otherUserId: userB.username,
+                message,
               })
             ])
           )
