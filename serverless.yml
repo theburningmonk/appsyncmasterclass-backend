@@ -29,6 +29,13 @@ custom:
   serverless-layers:
     layersDeploymentBucket: ${ssm:/appsyncmasterclass/${self:custom.stage}/layer-deployment-bucket}
 
+  appSyncCaching:
+    default:
+    prod:
+      behavior: PER_RESOLVER_CACHING
+      ttl: 3600
+      type: T2_SMALL
+
 functions:
   confirmUserSignup:
     handler: functions/confirm-user-signup.handler
