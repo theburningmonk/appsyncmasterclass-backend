@@ -1,0 +1,9 @@
+{
+  "version": "2018-05-29",
+  "operation": "BatchInvoke",
+  "payload": {
+    "userId": $utils.toJson($context.source.creator),
+    "caller":  $utils.toJson($context.identity.username),
+    "selection":  $utils.toJson($context.info.selectionSetList)
+  }
+}

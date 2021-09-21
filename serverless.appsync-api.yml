@@ -130,7 +130,9 @@ mappingTemplates:
   # NESTED FIELDS
   - type: Tweet
     field: profile
-    dataSource: usersTable
+    dataSource: getTweetCreatorFunction
+    request: Tweet.profile.batchInvoke.request.vtl
+    response: false
     caching:
       keys:
         - $context.identity.username
@@ -138,9 +140,9 @@ mappingTemplates:
       ttl: 300
   - type: Retweet
     field: profile
-    dataSource: usersTable
-    request: Tweet.profile.request.vtl
-    response: Tweet.profile.response.vtl
+    dataSource: getTweetCreatorFunction
+    request: Tweet.profile.batchInvoke.request.vtl
+    response: false
     caching:
       keys:
         - $context.identity.username
@@ -148,9 +150,9 @@ mappingTemplates:
       ttl: 300
   - type: Reply
     field: profile
-    dataSource: usersTable
-    request: Tweet.profile.request.vtl
-    response: Tweet.profile.response.vtl
+    dataSource: getTweetCreatorFunction
+    request: Tweet.profile.batchInvoke.request.vtl
+    response: false
     caching:
       keys:
         - $context.identity.username
@@ -339,6 +341,10 @@ dataSources:
     name: sendDirectMessageFunction
     config:
       functionName: sendDirectMessage
+  - type: AWS_LAMBDA
+    name: getTweetCreatorFunction
+    config:
+      functionName: getTweetCreator
 
 substitutions:
   TweetsTable: !Ref TweetsTable
