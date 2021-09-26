@@ -34,5 +34,13 @@ module.exports.handler = async (payloads) => {
     }
   })
 
-  return userIds.map(id => _.find(users, { id }))
+  // { data, errorMessage, errorType }
+  return userIds.map(id => {
+    const user = _.find(users, { id })
+    if (user) {
+      return { data: user }
+    } else {
+      return { errorType: 'UserNotFound', errorMessage: 'User is not found.' }
+    }
+  })
 }

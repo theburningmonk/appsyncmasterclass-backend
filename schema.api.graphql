@@ -203,13 +203,13 @@ type OtherProfile implements IProfile {
 
 interface ITweet {
   id: ID!
-  profile: IProfile!
+  profile: IProfile
   createdAt: AWSDateTime!
 }
 
 type Tweet implements ITweet {
   id: ID!
-  profile: IProfile!
+  profile: IProfile
   createdAt: AWSDateTime!
   text: String!
   replies: Int!
@@ -221,7 +221,7 @@ type Tweet implements ITweet {
 
 type Reply implements ITweet {
   id: ID!
-  profile: IProfile!
+  profile: IProfile
   createdAt: AWSDateTime!
   inReplyToTweet: ITweet!
   inReplyToUsers: [IProfile!]
@@ -235,7 +235,7 @@ type Reply implements ITweet {
 
 type Retweet implements ITweet {
   id: ID!
-  profile: IProfile!
+  profile: IProfile
   createdAt: AWSDateTime!
   retweetOf: ITweet!
 }
