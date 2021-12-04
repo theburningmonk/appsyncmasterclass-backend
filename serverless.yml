@@ -304,6 +304,10 @@ functions:
         Action: dynamodb:BatchGetItem
         Resource: !GetAtt UsersTable.Arn
 
+  firehoseTransformer:
+    handler: functions/firehose-transformer.handler
+    timeout: 61
+
 resources:
   Resources:
     UsersTable:
@@ -625,6 +629,87 @@ resources:
                 - '*'
               AllowedHeaders:
                 - '*'
+
+    AnalyticsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: true
+          BlockPublicPolicy: true
+          IgnorePublicAcls: true
+          RestrictPublicBuckets: true
+
+    FirehoseStream:
+      Type: AWS::KinesisFirehose::DeliveryStream
+      Properties:
+        DeliveryStreamType: DirectPut
+        ExtendedS3DestinationConfiguration:
+          BucketARN: !GetAtt AnalyticsBucket.Arn
+          BufferingHints:
+            IntervalInSeconds: 60
+            SizeInMBs: 1
+          CloudWatchLoggingOptions:
+            Enabled: true
+            LogGroupName: !Ref FirehoseLogGroup
+            LogStreamName: !Ref FirehoseLogStream
+          CompressionFormat: GZIP
+          RoleARN: !GetAtt FirehoseDeliveryIamRole.Arn
+          Prefix: analytics/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/
+          ErrorOutputPrefix: analytics_errors/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/!{firehose:error-output-type}
+          ProcessingConfiguration:
+            Enabled: true
+            Processors:
+              - Type: Lambda
+                Parameters:
+                  - ParameterName: LambdaArn
+                    ParameterValue: !GetAtt FirehoseTransformerLambdaFunction.Arn
+
+    FirehoseLogGroup:
+      Type: AWS::Logs::LogGroup
+      Properties:
+        RetentionInDays: 14
+
+    FirehoseLogStream:
+      Type: AWS::Logs::LogStream
+      Properties:
+        LogGroupName:
+          Ref: FirehoseLogGroup
+
+    FirehoseDeliveryIamRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: firehose.amazonaws.com
+              Action: sts:AssumeRole
+        Path: "/"
+        Policies:
+          - PolicyName: root
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - s3:AbortMultipartUpload
+                    - s3:GetBucketLocation
+                    - s3:GetObject
+                    - s3:ListBucket
+                    - s3:ListBucketMultipartUploads
+                    - s3:PutObject
+                  Resource:
+                    - !GetAtt AnalyticsBucket.Arn
+                    - !Sub ${AnalyticsBucket.Arn}/*
+                - Effect: Allow
+                  Action: logs:PutLogEvents
+                  Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${FirehoseLogGroup}:log-stream:*
+                - Effect: Allow
+                  Action:
+                    - lambda:InvokeFunction
+                    - lambda:GetFunctionConfiguration
+                  Resource: !GetAtt FirehoseTransformerLambdaFunction.Arn
 
   Outputs:
     AwsRegion:
