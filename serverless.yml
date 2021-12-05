@@ -711,6 +711,76 @@ resources:
                     - lambda:GetFunctionConfiguration
                   Resource: !GetAtt FirehoseTransformerLambdaFunction.Arn
 
+    IdentityPool:
+      Type: AWS::Cognito::IdentityPool
+      Properties:
+        AllowUnauthenticatedIdentities: true
+        AllowClassicFlow: false
+        CognitoIdentityProviders:
+          - ClientId: !Ref WebUserPoolClient
+            ProviderName: !GetAtt CognitoUserPool.ProviderName
+            ServerSideTokenCheck: true
+
+    UnauthedClientRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action: sts:AssumeRoleWithWebIdentity
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: !Ref IdentityPool
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: unauthenticated
+        Policies:
+          - PolicyName: CognitoPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - firehose:PutRecord
+                    - firehose:PutRecordBatch
+                  Resource: !GetAtt FirehoseStream.Arn
+
+    AuthedClientRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Federated: cognito-identity.amazonaws.com
+              Action: sts:AssumeRoleWithWebIdentity
+              Condition:
+                StringEquals:
+                  cognito-identity.amazonaws.com:aud: !Ref IdentityPool
+                ForAnyValue:StringLike:
+                  cognito-identity.amazonaws.com:amr: authenticated
+        Policies:
+          - PolicyName: CognitoPolicy
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - firehose:PutRecord
+                    - firehose:PutRecordBatch
+                  Resource: !GetAtt FirehoseStream.Arn
+
+    IdentityPoolRoleMapping:
+      Type: AWS::Cognito::IdentityPoolRoleAttachment
+      Properties:
+        IdentityPoolId: !Ref IdentityPool
+        Roles:
+          authenticated: !GetAtt AuthedClientRole.Arn
+          unauthenticated: !GetAtt UnauthedClientRole.Arn
+
   Outputs:
     AwsRegion:
       Value: ${self:custom.region}
@@ -723,3 +793,12 @@ resources:
 
     ApiUrl:
       Value: !GetAtt AppsyncmasterclassGraphQlApi.GraphQLUrl
+
+    CognitoUserPoolProviderName:
+      Value: !GetAtt CognitoUserPool.ProviderName
+
+    CognitoIdentityPoolId:
+      Value: !Ref IdentityPool
+
+    FirehoseStreamName:
+      Value: !Ref FirehoseStream
