@@ -5,6 +5,8 @@ schema {
 }
 
 type Query {
+  getAnalyticsConfig: AnalyticsConfig
+
   getImageUploadUrl(extension: String, contentType: String): AWSURL!
 
   getMyTimeline(limit: Int!, nextToken: String): UnhydratedTweetsPage!
@@ -355,4 +357,9 @@ type Message {
 type MessagesPage {
   messages: [Message!]
   nextToken: String
+}
+
+type AnalyticsConfig {
+  identityPoolId: ID!
+  streamName: String!
 }
