@@ -746,6 +746,11 @@ resources:
                     - firehose:PutRecord
                     - firehose:PutRecordBatch
                   Resource: !GetAtt FirehoseStream.Arn
+                - Effect: Allow
+                  Action: appsync:GraphQL
+                  Resource: 
+                    - !Sub ${AppsyncmasterclassGraphQlApi.Arn}/types/Query/fields/getAnalyticsConfig
+                    - !Sub ${AppsyncmasterclassGraphQlApi.Arn}/types/AnalyticsConfig
 
     AuthedClientRole:
       Type: AWS::IAM::Role
@@ -772,6 +777,11 @@ resources:
                     - firehose:PutRecord
                     - firehose:PutRecordBatch
                   Resource: !GetAtt FirehoseStream.Arn
+                - Effect: Allow
+                  Action: appsync:GraphQL
+                  Resource: 
+                    - !Sub ${AppsyncmasterclassGraphQlApi.Arn}/types/Query/fields/getAnalyticsConfig
+                    - !Sub ${AppsyncmasterclassGraphQlApi.Arn}/types/AnalyticsConfig
 
     IdentityPoolRoleMapping:
       Type: AWS::Cognito::IdentityPoolRoleAttachment

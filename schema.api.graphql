@@ -6,6 +6,7 @@ schema {
 
 type Query {
   getAnalyticsConfig: AnalyticsConfig
+  @aws_iam @aws_cognito_user_pools
 
   getImageUploadUrl(extension: String, contentType: String): AWSURL!
 
@@ -359,7 +360,7 @@ type MessagesPage {
   nextToken: String
 }
 
-type AnalyticsConfig {
+type AnalyticsConfig @aws_iam @aws_cognito_user_pools {
   identityPoolId: ID!
   streamName: String!
 }
