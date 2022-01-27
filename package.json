@@ -37,6 +37,7 @@
     "serverless-export-env": "^1.4.0",
     "serverless-iam-roles-per-function": "^2.0.2",
     "serverless-layers": "^2.3.3",
+    "serverless-plugin-ifelse": "^1.0.7",
     "ws": "^7.4.4"
   },
   "dependencies": {

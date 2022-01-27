@@ -6,6 +6,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-export-env
   - serverless-layers
+  - serverless-plugin-ifelse
 
 provider:
   name: aws
@@ -39,6 +40,12 @@ custom:
       behavior: PER_RESOLVER_CACHING
       ttl: 3600
       type: T2_SMALL
+
+  serverlessIfElse:
+    - If: '"${self:custom.stage}" == "prod"'
+      ElseExclude:
+        - functions.setResolverLogLevelToAll
+        - functions.setResolverLogLevelToError
 
 functions:
   confirmUserSignup:
@@ -311,6 +318,42 @@ functions:
   firehoseTransformer:
     handler: functions/firehose-transformer.handler
     timeout: 61
+
+  setResolverLogLevelToAll:
+    handler: functions/set-resolver-log-level.handler
+    events:
+      - schedule: cron(6 * * * ? *) # 6 mins past the hour every hour
+    environment:
+      APPSYNC_API_ID: !GetAtt AppsyncmasterclassGraphQlApi.ApiId
+      FIELD_LOG_LEVEL: ALL
+    iamRoleStatementsName: ${self:service}-${self:custom.stage}-setLogLevelToAll
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - appsync:GetGraphqlApi
+          - appsync:UpdateGraphqlApi
+        Resource: !Ref AppsyncmasterclassGraphQlApi
+      - Effect: Allow
+        Action: iam:PassRole
+        Resource: !GetAtt AppSyncLoggingServiceRole.Arn
+
+  setResolverLogLevelToError:
+    handler: functions/set-resolver-log-level.handler
+    events:
+      - schedule: cron(12 * * * ? *) # 12 mins past the hour every hour
+    environment:
+      APPSYNC_API_ID: !GetAtt AppsyncmasterclassGraphQlApi.ApiId
+      FIELD_LOG_LEVEL: ERROR
+    iamRoleStatementsName: ${self:service}-${self:custom.stage}-setLogLevelToErr
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - appsync:GetGraphqlApi
+          - appsync:UpdateGraphqlApi
+        Resource: !Ref AppsyncmasterclassGraphQlApi
+      - Effect: Allow
+        Action: iam:PassRole
+        Resource: !GetAtt AppSyncLoggingServiceRole.Arn
 
 resources:
   Resources:
