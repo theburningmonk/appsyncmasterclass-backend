@@ -6,6 +6,10 @@ userPoolConfig:
   awsRegion: eu-west-1
   defaultAction: ALLOW
   userPoolId: !Ref CognitoUserPool
+logConfig:
+  loggingRoleArn: !GetAtt AppSyncLoggingServiceRole.Arn
+  level: ${self:custom.appSyncLogLevel.${self:custom.stage}, self:custom.appSyncLogLevel.default}
+  excludeVerboseContent: false
 additionalAuthenticationProviders:
   - authenticationType: AWS_IAM
 mappingTemplatesLocation: mapping-templates

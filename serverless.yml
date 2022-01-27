@@ -29,6 +29,10 @@ custom:
   serverless-layers:
     layersDeploymentBucket: ${ssm:/appsyncmasterclass/${self:custom.stage}/layer-deployment-bucket}
 
+  appSyncLogLevel:
+    default: ALL
+    prod: ERROR
+
   appSyncCaching:
     default:
     prod:
@@ -790,6 +794,29 @@ resources:
         Roles:
           authenticated: !GetAtt AuthedClientRole.Arn
           unauthenticated: !GetAtt UnauthedClientRole.Arn
+
+    AppSyncLoggingServiceRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: appsync.amazonaws.com
+              Action: sts:AssumeRole
+        Path: /service-role/
+        Policies:
+          - PolicyName: root
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action: 
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource: !Sub arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*
 
   Outputs:
     AwsRegion:
