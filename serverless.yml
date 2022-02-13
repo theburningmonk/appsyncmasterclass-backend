@@ -12,9 +12,18 @@ provider:
   name: aws
   runtime: nodejs12.x
   region: eu-west-1
+  tracing:
+    lambda: true
+    apiGateway: false
   environment:
     STAGE: ${self:custom.stage}
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
 
 package:
   exclude:
@@ -22,6 +31,9 @@ package:
     - package.json
 
 custom:
+  serverless-iam-roles-per-function:
+    defaultInherit: true
+
   region: ${opt:region, self:provider.region}
   stage: ${opt:stage, self:provider.stage}
   appSync:

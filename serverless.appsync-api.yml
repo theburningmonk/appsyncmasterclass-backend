@@ -10,6 +10,7 @@ logConfig:
   loggingRoleArn: !GetAtt AppSyncLoggingServiceRole.Arn
   level: ${self:custom.appSyncLogLevel.${self:custom.stage}, self:custom.appSyncLogLevel.default}
   excludeVerboseContent: false
+xrayEnabled: true
 additionalAuthenticationProviders:
   - authenticationType: AWS_IAM
 mappingTemplatesLocation: mapping-templates
