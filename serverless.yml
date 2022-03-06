@@ -7,6 +7,7 @@ plugins:
   - serverless-export-env
   - serverless-layers
   - serverless-plugin-ifelse
+  - serverless-lumigo
 
 provider:
   name: aws
@@ -58,6 +59,10 @@ custom:
       ElseExclude:
         - functions.setResolverLogLevelToAll
         - functions.setResolverLogLevelToError
+
+  lumigo:
+    token: ${ssm:/${self:custom.stage}/lumigo-token~true}
+    skipInstallNodeTracer: true
 
 functions:
   confirmUserSignup:
