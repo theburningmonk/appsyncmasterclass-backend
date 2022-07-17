@@ -1,0 +1,129 @@
+config:
+  target: "{{ $processEnvironment.API_URL }}"
+  phases:
+    - duration: 300
+      arrivalRate: 1
+      maxVusers: 1
+  http:
+    timeout: 30
+  payload:
+    path: users.csv
+    fields:
+      - idToken
+scenarios:
+  - name: post tweet to timeline
+    flow:
+      - log: get profile
+      - post:
+          url: /
+          headers:
+            Authorization: "Bearer {{ idToken }}"
+          json:
+            query: "query getMyProfile {
+              getMyProfile {
+                id
+                name
+                screenName
+                bio
+                createdAt
+                birthdate
+              }  
+            }"
+          expect:
+            - statusCode: 200
+
+      - loop:
+        - think: 1 # wait 1 second between iterations
+        - log: post tweet
+        - post:
+            url: /
+            headers:
+              Authorization: "Bearer {{ idToken }}"
+            json:
+              query: "mutation tweet($text: String!) {
+                tweet(text: $text) {
+                  createdAt
+                  id
+                  liked
+                  likes
+                  profile {
+                    id
+                    name
+                    screenName
+                  }
+                  replies
+                  retweeted
+                  retweets
+                  text
+                }  
+              }"
+              variables:
+                text: this is a tweet
+            expect:
+              - statusCode: 200
+              - hasProperty: data.tweet.id
+
+        - log: load timeline
+        - post:
+            url: /
+            headers:
+              Authorization: "Bearer {{ idToken }}"
+            json:
+              query: "query getMyTimeline {
+                getMyTimeline(limit:25) {
+                  nextToken
+                  tweets {
+                    id
+                    profile {
+                      id
+                      name
+                      screenName
+                    }
+                    ... on Tweet {
+                      text
+                      likes
+                      replies
+                      retweets
+                    }
+                    ... on Retweet {
+                      retweetOf {
+                        id
+                        profile {
+                          id
+                          name
+                          screenName
+                        }
+                        ... on Tweet {
+                          id
+                          text
+                        }
+                      }
+                    }
+                    ... on Reply {
+                      text
+                      inReplyToUsers {
+                        id
+                        name
+                        screenName
+                      }
+                      inReplyToTweet {
+                        id
+                        profile {
+                          id
+                          name
+                          screenName
+                        }
+                        ... on Tweet {
+                          id
+                          text
+                        }
+                      }
+                    }
+                  }
+                }  
+              }"
+            expect:
+              - statusCode: 200
+              - hasProperty: data.tweet.id
+
+        count: 10

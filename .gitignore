@@ -9,3 +9,4 @@ jspm_packages
 serverless.manifest.json
 .serverless/manifest.json
 .DS_Store
+.artillery/users.csv

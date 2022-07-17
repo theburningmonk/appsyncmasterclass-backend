@@ -10,7 +10,9 @@
     "jest": "jest",
     "test": "jest --verbose ./__tests__/test_cases/unit --silent",
     "integration-test": "jest --verbose ./__tests__/test_cases/integration --silent",
-    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e --silent"
+    "e2e-test": "jest --verbose ./__tests__/test_cases/e2e --silent",
+    "load-test": "dotenv artillery run ./.artillery/test.yml",
+    "load-test:debug": "DEBUG=http,http:response dotenv artillery run ./.artillery/test.yml"
   },
   "repository": {
     "type": "git",
@@ -27,10 +29,12 @@
     "@types/jest": "^26.0.15",
     "amplify-appsync-simulator": "^1.23.8",
     "amplify-velocity-template": "^1.3.4",
+    "artillery": "^2.0.0-21",
     "async-retry": "^1.3.1",
     "aws-sdk": "^2.778.0",
     "axios": "^0.21.0",
     "dotenv": "^8.2.0",
+    "dotenv-cli": "^6.0.0",
     "jest": "^26.6.1",
     "serverless": "2.4.0",
     "serverless-appsync-plugin": "^1.4.0",
@@ -39,7 +43,8 @@
     "serverless-layers": "^2.3.3",
     "serverless-lumigo": "^1.13.2",
     "serverless-plugin-ifelse": "^1.0.7",
-    "ws": "^7.4.4"
+    "ws": "^7.4.4",
+    "yargs": "^17.5.1"
   },
   "dependencies": {
     "@lumigo/tracer": "^1.71.0",
